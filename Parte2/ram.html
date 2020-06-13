@@ -1,0 +1,110 @@
+
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    
+    <title>Informacion RAM</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+        var jsonOBJ;
+        var memoria=[0,0,0,0,0]; //arreglo donde voy guardando los ultimos 5 datos de memoria usada
+        
+        var contador=0;
+        const requestURL ='http://127.0.0.1:3000/memoria';     //obtengo el json
+        const request = new XMLHttpRequest();   //creo la solicitud
+        function solicitarJSON(){
+            request.open('GET', requestURL);    //hago la solicitud
+            request.responseType = 'json';
+            request.send();
+        }
+        
+        request.onload = function() {
+            jsonOBJ = request.response;
+            google.load('visualization','1.0',{'packages':['corechart']});
+            ActualizarDatos(jsonOBJ['MemoriaUtilizada']);
+            dibujar();
+        }
+        google.load('visualization','1.0',{'packages':['corechart']});
+        google.setOnLoadCallback(dibujar);
+        
+        function dibujar()
+        {
+            var data= new google.visualization.DataTable();
+            data.addColumn('string','Tiempo');
+            data.addColumn('number', 'Memoria Utilizada (MB)');
+            data.addRows(
+                [
+                    
+                    ["t-4",memoria[0]],
+                    ["t-3",memoria[1]],
+                    ["t-2",memoria[2]],
+                    ["t-1",memoria[3]],
+                    ["t",memoria[4]]
+                ]
+            );
+            var opciones = {
+                chart: {
+                    'title':'Uso de memoria RAM',
+                    'width':500,
+                    'height':300
+                },
+
+                vAxis: {
+                    minValue: memoria[0]-20,
+                    maxValue: memoria[4]+20,
+                    format: '#\'MB\'',
+                    direction: 1
+                },
+
+                hAxis: {
+                    maxTextLines: 5,
+                    textStyle: {
+                    fontSize: 14,
+                }
+                },
+                
+            }
+            var grafica = new google.visualization.AreaChart(
+                document.getElementById('GraficaRAM')
+            );
+            grafica.draw(data,opciones);
+        }
+        
+        function ActualizarDatos(NuevoDato){
+            memoria[0]=memoria[1];
+            memoria[1]=memoria[2];
+            memoria[2]=memoria[3];
+            memoria[3]=memoria[4];
+            memoria[4]=NuevoDato;
+            var memoTotal = document.getElementById('Tamanio_Total');
+            var memoUsada = document.getElementById('Memoria_Utilizada');
+            var memoLibre = document.getElementById('Memoria_Libre');
+            var Porcentaje = document.getElementById('Porcentaje_utilizado');
+            memoTotal.innerHTML = "Memoria Total: "+jsonOBJ['MemoriaTotal'];
+            memoUsada.innerHTML = "Memoria Libre: "+jsonOBJ['MemoriaLibre'];
+            memoLibre.innerHTML = "Memoria Utilizada: "+jsonOBJ['MemoriaUtilizada'];
+            Porcentaje.innerHTML = "Porcentaje Memoria Utilizada: "+jsonOBJ['PorcentajeUtilizado'];
+        }
+        function contador(){
+    	    var contador = document.getElementById("contador");
+	        contador.value = cont;
+	        cont++;
+        }
+        setInterval('solicitarJSON()',1000);
+
+    </script>
+
+
+
+    <div id="GraficaRAM"></div>
+    <p>INFORMACION DE LA MEMORIA RAM</p>
+    <br>
+    <br>
+    <br>
+    <label id="Tamanio_Total"></label><br>
+    <label id="Memoria_Utilizada"></label><br>
+    <label id="Memoria_Libre"></label><br>
+    <label id="Porcentaje_utilizado"></label><br>
+  </body>
+</html>
