@@ -61,7 +61,7 @@ func ramInfo(w http.ResponseWriter, r *http.Request){
 
 }
 
-	func cpuInfo(w http.ResponseWriter, r *http.Request){
+func cpuInfo(w http.ResponseWriter, r *http.Request){
 	//fmt.Println("cpu Info")
 	//app := "top"
 	//args := []string{ "-bn2", "| fgrep \"Cpu(s)\"", "| tail -1"}
@@ -69,10 +69,10 @@ func ramInfo(w http.ResponseWriter, r *http.Request){
 	cmd := exec.Command("/bin/sh", "-c","top -bn2 | fgrep \"Cpu(s)\" | tail -1")
 	stdout, err := cmd.Output()
 
-if err != nil {
-println(err.Error())
-return
-}
+	if err != nil {
+		println(err.Error())
+		return
+	}
 
 //print(string(stdout))
 
