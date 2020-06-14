@@ -6,6 +6,7 @@ import (
 	"strings"
 	"strconv"
 	"encoding/json"
+	"os/exec"
 )
 
 type StructMemoria struct{
@@ -15,13 +16,20 @@ type StructMemoria struct{
 	PorcentajeUtilizado int
 }
 
+type StructCpu struct{
+	PorcentajeUsado float64
+}
+
 func main() {
+	fmt.Println("hello world")
 	http.HandleFunc("/memoria",ramInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
-	http.ListenAndServe(":3000",nil); 	
-    fmt.Println("hello world")
+	//http.ListenAndServe(":3000",nil); 	
+    http.HandleFunc("/cpu",cpuInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
+	http.ListenAndServe(":3000",nil);
 }
 
 func ramInfo(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Ram info")
 	b, err := ioutil.ReadFile("/proc/meminfo");
 	if err != nil {
 		return;
@@ -50,5 +58,44 @@ func ramInfo(w http.ResponseWriter, r *http.Request){
 	}else{
 		return
 	}
+
+}
+
+	func cpuInfo(w http.ResponseWriter, r *http.Request){
+	//fmt.Println("cpu Info")
+	//app := "top"
+	//args := []string{ "-bn2", "| fgrep \"Cpu(s)\"", "| tail -1"}
+
+	cmd := exec.Command("/bin/sh", "-c","top -bn2 | fgrep \"Cpu(s)\" | tail -1")
+	stdout, err := cmd.Output()
+
+if err != nil {
+println(err.Error())
+return
+}
+
+//print(string(stdout))
+
+	listaInfo := strings.Split(string(stdout),",");//separo el archivo por saltos de linea
+	PorcentajeLibre := strings.Replace((listaInfo[3])[1:5]," ","",-1)
+	//fmt.Println(PorcentajeLibre)
+	PorLibre, err1 := strconv.ParseFloat( PorcentajeLibre, 32);
+	if err1 == nil{
+		//fmt.Println(PorLibre)
+		PorOcupado := (100-PorLibre)
+		//fmt.Println(PorOcupado)
+		memResponse := StructCpu{PorOcupado}
+		jsonResponse, errorjson := json.Marshal(memResponse)
+		if errorjson != nil{
+			http.Error(w, errorjson.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
+		w.Write(jsonResponse)
+	}
+	
+
 
 }

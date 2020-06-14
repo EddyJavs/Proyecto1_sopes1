@@ -1,0 +1,95 @@
+
+<html>
+    <head>
+      <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+      
+      <title>Informacion CPU</title>
+    </head>
+    <body>
+        <h1 align="center">PORCENTAJE DE USO DEL CPU</h1>
+      <script type="text/javascript">
+          var jsonOBJ;
+          var memoria=[0,0,0,0,0]; //arreglo donde voy guardando los ultimos 5 datos de memoria usada
+          
+          var contador=0;
+          const requestURL ='http://127.0.0.1:3000/cpu';     //obtengo el json
+          const request = new XMLHttpRequest();   //creo la solicitud
+          function solicitarJSON(){
+              request.open('GET', requestURL);    //hago la solicitud
+              request.responseType = 'json';
+              request.send();
+          }
+          
+          request.onload = function() {
+              jsonOBJ = request.response;
+              google.load('visualization','1.0',{'packages':['corechart']});
+              ActualizarDatos(jsonOBJ['PorcentajeUsado']);
+              dibujar();
+          }
+          google.load('visualization','1.0',{'packages':['corechart']});
+          google.setOnLoadCallback(dibujar);
+          
+          function dibujar()
+          {
+              var data= new google.visualization.DataTable();
+              data.addColumn('string','Tiempo');
+              data.addColumn('number', 'Porcentaje CPU utilizado');
+              data.addRows(
+                  [
+                      ["t-4",memoria[0]],
+                      ["t-3",memoria[1]],
+                      ["t-2",memoria[2]],
+                      ["t-1",memoria[3]],
+                      ["t",memoria[4]]
+                  ]
+              );
+              var opciones = {
+                  chart: {
+                      'title':'Uso del CPU',
+                      'width':500,
+                      'height':300
+                  },
+  
+                  vAxis: {
+                      minValue: memoria[4]-20,
+                      maxValue: memoria[4]+20,
+                      format: '#\'%\'',
+                      direction: 1
+                  },
+  
+                  hAxis: {
+                      maxTextLines: 5,
+                      textStyle: {
+                      fontSize: 14,
+                  }
+                  },
+                  
+              }
+              var grafica = new google.visualization.AreaChart(
+                  document.getElementById('GraficaRAM')
+              );
+              grafica.draw(data,opciones);
+          }
+          
+          function ActualizarDatos(NuevoDato){
+              memoria[0]=memoria[1];
+              memoria[1]=memoria[2];
+              memoria[2]=memoria[3];
+              memoria[3]=memoria[4];
+              memoria[4]=NuevoDato;
+              }
+          function contador(){
+              var contador = document.getElementById("contador");
+              contador.value = cont;
+              cont++;
+          }
+          setInterval('solicitarJSON()',4100);
+  
+      </script>
+  
+  
+  
+      <div id="GraficaRAM"></div>
+      
+    </body>
+  </html>
