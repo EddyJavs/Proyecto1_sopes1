@@ -124,6 +124,6 @@ function eliminarProc(tr,value) {
         	
         	api.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
-
+		    	tr.disabled = true;
 		    }}
 }
