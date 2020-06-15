@@ -38,6 +38,13 @@ document.querySelector('#proc2').addEventListener('click', function(){
 							            <td>${item.PID}</td>
 							            <td>${item.NOMBRE}</td>
 							            <td>${item.STADO} </td>
+							          	<td><p>
+									      <label>
+									        <input type="checkbox" />
+									        <span>Kill</span>
+									      </label>
+									    </p>
+									    </td>
 							          	</tr>`;
 		      	}
 		      	
@@ -85,6 +92,13 @@ document.querySelector('#proc2').addEventListener('click', function(){
 							            <td>${item.PID}</td>
 							            <td>${item.NOMBRE}</td>
 							            <td>${item.STADO} </td>
+							            <td><p>
+									      <label>
+									        <input type="checkbox" />
+									        <span>Kill</span>
+									      </label>
+									    </p>
+									    </td>
 							          	</tr>`;
 		      	}
 		      	
@@ -97,3 +111,7 @@ document.querySelector('#proc2').addEventListener('click', function(){
 
             console.log("clic reconocido")
         }
+
+function myFunction() {
+  alert("Page is loaded");
+}

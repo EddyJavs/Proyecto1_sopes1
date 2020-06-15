@@ -13,14 +13,18 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
-<body>
+<body >
    
 <!--<a class="waves-effect waves-light btn-small">Button</a> -->
 <div class="container">
     <div class="section">
-        <button class="btn" id="proc">Procesos Padres</button>
-        <button class="btn" id="proc2">Procesos Hijos</button>
-        <table id="res">
+        <button class="btn" id="proc" align="left">Procesos Padres</button>
+        <button class="btn" id="proc2"align="left">Procesos Hijos</button>
+        <button class="btn" id="procKill" align="right">Eliminar Procesos</button>
+        
+    </div>
+ <div class="section">
+     <table id="res">
             <thead>
               <tr>
               <th>PID</th>
@@ -29,13 +33,21 @@
               </tr>
               </thead>
         </table>
-    </div>
-
+ </div>
 </div>
 
 <script src="app.js"></script>
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
-
+<footer class="page-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12" id="info">
+                
+              </div>
+              
+            </div>
+          </div>
+        </footer>
 </html>
