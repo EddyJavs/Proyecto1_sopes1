@@ -40,7 +40,7 @@ document.querySelector('#proc2').addEventListener('click', function(){
 							            <td>${item.STADO} </td>
 							          	<td><p>
 									      <label>
-									        <input type="checkbox" />
+									         <input type="checkbox"  onclick="eliminarProc(this,'${item.PID}')"/>
 									        <span>Kill</span>
 									      </label>
 									    </p>
@@ -94,7 +94,7 @@ document.querySelector('#proc2').addEventListener('click', function(){
 							            <td>${item.STADO} </td>
 							            <td><p>
 									      <label>
-									        <input type="checkbox" />
+									        <input type="checkbox"  onclick="eliminarProc(this,'${item.PID}')"/>
 									        <span>Kill</span>
 									      </label>
 									    </p>
@@ -112,6 +112,18 @@ document.querySelector('#proc2').addEventListener('click', function(){
             console.log("clic reconocido")
         }
 
-function myFunction() {
-  alert("Page is loaded");
+function eliminarProc(tr,value) {
+
+  alert("PDI -> " + value);
+
+  let url = `http://127.0.0.1:3000/matarTask/${value}`;
+        	
+        	const api = new XMLHttpRequest();
+        	api.open('GET', url); 
+        	api.send();
+        	
+        	api.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+
+		    }}
 }
