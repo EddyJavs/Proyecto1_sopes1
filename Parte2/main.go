@@ -196,8 +196,9 @@ func MatarProceso(w http.ResponseWriter, req *http.Request) {
 
         idProc := strconv.Itoa(int(target.Pid))
         fmt.Println("Pid_proc: ", idProc)
+        
         if  idProc == id{ 
-            fmt.Println("Proceso encontrado: ", id)
+            fmt.Println("Se Busca Proceso: ", id)
             target.Kill()
             break
         }else{
