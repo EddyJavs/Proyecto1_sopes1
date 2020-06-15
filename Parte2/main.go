@@ -8,6 +8,7 @@ import (
 	"log"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"os/exec"
 )
 
 type StructMemoria struct{
@@ -18,20 +19,26 @@ type StructMemoria struct{
 }
 
 
-    type Process struct{
-        PADRE int32 `json:"PADRE"`
-        PID int32 `json:"PID"`
-        NOMBRE string `json:"NOMBRE"`
-        STADO int32 `json:"STADO"`
+type Process struct{
+    PADRE int32 `json:"PADRE"`
+    PID int32 `json:"PID"`
+    NOMBRE string `json:"NOMBRE"`
+    STADO int32 `json:"STADO"`
         //HIJOS [] Process `json:"hijos"`
-    }
+}
+
+type StructCpu struct{
+	PorcentajeUsado float64
+}
+
 
 func main() {
 	fmt.Println("hello world")
 	router:= mux.NewRouter()
 
-	router.HandleFunc("/memoria",ramInfo).Methods("GET")
-	router.HandleFunc("/procesos",ProcessInfo).Methods("GET")
+	router.HandleFunc("/memoria",ramInfo).Methods("GET");
+	router.HandleFunc("/procesos",ProcessInfo).Methods("GET");
+	router.HandleFunc("/cpu",cpuInfo).Methods("GET"); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
 	//http.HandleFunc("/memoria",ramInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
 	//http.HandleFunc("/procesos",ProcessInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
 	//http.ListenAndServe(":3000",nil); 	
@@ -42,8 +49,9 @@ func main() {
     fmt.Println("hello world")
 }
 
+
 func ramInfo(w http.ResponseWriter, r *http.Request){
-	fmt.Println("MEMORIA")
+	fmt.Println("Ram info")
 	b, err := ioutil.ReadFile("/proc/meminfo");
 	if err != nil {
 		return;
@@ -74,6 +82,44 @@ func ramInfo(w http.ResponseWriter, r *http.Request){
 	}
 
 }
+
+func cpuInfo(w http.ResponseWriter, r *http.Request){
+	//fmt.Println("cpu Info")
+	//app := "top"
+	//args := []string{ "-bn2", "| fgrep \"Cpu(s)\"", "| tail -1"}
+
+	cmd := exec.Command("/bin/sh", "-c","top -bn2 | fgrep \"Cpu(s)\" | tail -1")
+	stdout, err := cmd.Output()
+
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+//print(string(stdout))
+
+	listaInfo := strings.Split(string(stdout),",");//separo el archivo por saltos de linea
+	PorcentajeLibre := strings.Replace((listaInfo[3])[1:5]," ","",-1)
+	//fmt.Println(PorcentajeLibre)
+	PorLibre, err1 := strconv.ParseFloat( PorcentajeLibre, 32);
+	if err1 == nil{
+		//fmt.Println(PorLibre)
+		PorOcupado := (100-PorLibre)
+		//fmt.Println(PorOcupado)
+		memResponse := StructCpu{PorOcupado}
+		jsonResponse, errorjson := json.Marshal(memResponse)
+		if errorjson != nil{
+			http.Error(w, errorjson.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
+		w.Write(jsonResponse)
+	}
+
+}
+
 
 func ProcessInfo(w http.ResponseWriter, req *http.Request){
 	log.Println("PROCESOS")
