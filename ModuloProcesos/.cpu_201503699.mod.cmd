@@ -1,0 +1,1 @@
+cmd_/home/charly/Desktop/Sopes/Proyecto1_sopes1/ModuloProcesos/cpu_201503699.mod := { echo  /home/charly/Desktop/Sopes/Proyecto1_sopes1/ModuloProcesos/cpu_201503699.o; echo; } > /home/charly/Desktop/Sopes/Proyecto1_sopes1/ModuloProcesos/cpu_201503699.mod
