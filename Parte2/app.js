@@ -19,6 +19,8 @@ document.querySelector('#proc2').addEventListener('click', function(){
 		      //document.getElementById("demo").innerHTML = this.responseText;
 		      let datos = JSON.parse(this.responseText);
 
+		      var objetivo = document.getElementById('texto_nav1');
+				objetivo.innerHTML = "     Total Procesos: "+ Object.keys(datos).length;
 		      //console.log(datos);
 
 		      let resultado = document.querySelector('#res'); //
@@ -70,7 +72,10 @@ document.querySelector('#proc2').addEventListener('click', function(){
 		    if (this.readyState == 4 && this.status == 200) {
 		      //document.getElementById("demo").innerHTML = this.responseText;
 		      let datos = JSON.parse(this.responseText);
-
+		      //let totalProcesos = Object.keys(datos).length;
+		       let totalProcesos = 650
+		       var objetivo = document.getElementById('texto_nav1');
+				objetivo.innerHTML = "     Total Procesos: "+ Object.keys(datos).length;
 		      //console.log(datos);
 
 		      let resultado = document.querySelector('#res'); //
@@ -86,6 +91,7 @@ document.querySelector('#proc2').addEventListener('click', function(){
 
 		      for(let item of  datos){
 		      	//${item.PADRE}|${item.PID}|${item.NOMBRE}|${item.STADO} 
+
 		      	if (item.PADRE != item.PID){
 		      		resultado.innerHTML +=`<tr>
 		      							<td>${item.PADRE}</td>
@@ -108,6 +114,9 @@ document.querySelector('#proc2').addEventListener('click', function(){
 		  };
 		   //$(".padre").toggle();
 		   //$('td:nth-child(1)').toggle();
+		    //infoProc.innerHTML = `<a>Total Procesos: ${totalProcesos}</a>`
+		    //objetivo.innerHTML += "\n     Total Corriendo: "+ corriendo;
+		    //objetivo.innerHTML += "\n     Total Duriendo: "+ durmiendo;
 
             console.log("clic reconocido")
         }
