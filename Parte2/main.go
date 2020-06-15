@@ -8,6 +8,7 @@ import (
 	"log"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/shirou/gopsutil/process"
 	"os/exec"
 )
 
@@ -38,6 +39,7 @@ func main() {
 
 	router.HandleFunc("/memoria",ramInfo).Methods("GET");
 	router.HandleFunc("/procesos",ProcessInfo).Methods("GET");
+	router.HandleFunc("/matarTask/{id}",MatarProceso).Methods("GET");
 	router.HandleFunc("/cpu",cpuInfo).Methods("GET"); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
 	//http.HandleFunc("/memoria",ramInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
 	//http.HandleFunc("/procesos",ProcessInfo); //al meterme a la ruta /memoria ejecuta la funcion ramInfo
@@ -165,12 +167,63 @@ func ProcessInfo(w http.ResponseWriter, req *http.Request){
 		if errorjson != nil{
 			http.Error(w, errorjson.Error(), http.StatusInternalServerError)
 			return
-		}
+	}
 
     w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
     //json.NewEncoder(w).Encode(procesos)
+
+}
+
+func MatarProceso(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+
+	id := params["id"]
+	//Pid,_ := strconv.Atoi(id)
+
+	fmt.Println("Se eliminara proceso: ", id)
+
+	list_processs,err := process.Processes()
+	
+	if err != nil {
+        log.Println("Processes() Failed, are you using windows?")
+        return
+    }
+
+    for _ , target := range list_processs{
+
+        idProc := strconv.Itoa(int(target.Pid))
+        fmt.Println("Pid_proc: ", idProc)
+        if  idProc == id{ 
+            fmt.Println("Proceso encontrado: ", id)
+            target.Kill()
+            break
+        }else{
+            fmt.Println("No se encontro proceso: ", id)
+        }
+        
+    }
+
+	//process2, err := list_processs.FindProcess(Pid)
+	//if err != nil {
+      //  http.Error(w, errorjson.Error(), http.StatusInternalServerError)
+		//	return
+    //}
+    //fmt.Println("%s\n",process2)
+
+	mapD := map[string]int{"status": 0}
+
+	sonResponse, errorjson := json.Marshal(mapD)
+		if errorjson != nil{
+			http.Error(w, errorjson.Error(), http.StatusInternalServerError)
+			return
+	}
+	fmt.Println("------")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	w.Write(sonResponse)
 
 }
