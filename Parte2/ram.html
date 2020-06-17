@@ -2,10 +2,21 @@
 <html>
   <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
     <title>Informacion RAM</title>
   </head>
   <body>
+    <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">USAC</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="cpu.html">CPU</a></li>
+        <li><a href="ram.html">RAM</a></li>
+        <li><a href="procesos.html">PROCESOS</a></li>
+      </ul>
+    </div>
+  </nav>
     <script type="text/javascript">
         var jsonOBJ;
         var memoria=[0,0,0,0,0]; //arreglo donde voy guardando los ultimos 5 datos de memoria usada
@@ -94,17 +105,26 @@
         setInterval('solicitarJSON()',1000);
 
     </script>
+ 
 
+    <div class="row">
 
+      <div class="col s3">
+        <!-- Grey navigation panel -->
+        <p>INFORMACION DE LA MEMORIA RAM</p>
+        <label id="Tamanio_Total"></label><br>
+        <label id="Memoria_Utilizada"></label><br>
+        <label id="Memoria_Libre"></label><br>
+        <label id="Porcentaje_utilizado"></label><br>
+      </div>
 
-    <div id="GraficaRAM"></div>
-    <p>INFORMACION DE LA MEMORIA RAM</p>
-    <br>
-    <br>
-    <br>
-    <label id="Tamanio_Total"></label><br>
-    <label id="Memoria_Utilizada"></label><br>
-    <label id="Memoria_Libre"></label><br>
-    <label id="Porcentaje_utilizado"></label><br>
+      <div class="col s9">
+        <!-- Teal page content  -->
+         <div id="GraficaRAM"></div>
+      </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </body>
 </html>

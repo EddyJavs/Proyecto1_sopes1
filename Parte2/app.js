@@ -73,7 +73,7 @@ document.querySelector('#proc2').addEventListener('click', function(){
 		      //document.getElementById("demo").innerHTML = this.responseText;
 		      let datos = JSON.parse(this.responseText);
 		      //let totalProcesos = Object.keys(datos).length;
-		       let totalProcesos = 650
+		       //let totalProcesos = 650
 		       var objetivo = document.getElementById('texto_nav1');
 				objetivo.innerHTML = "     Total Procesos: "+ Object.keys(datos).length;
 		      //console.log(datos);

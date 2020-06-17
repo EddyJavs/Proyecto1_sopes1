@@ -15,13 +15,32 @@
 
 <body >
  
- <nav>
-    
-     <span id="texto_nav1"></span>
-</nav>  
+    <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">USAC</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="cpu.html">CPU</a></li>
+        <li><a href="ram.html">RAM</a></li>
+        <li><a href="procesos.html">PROCESOS</a></li>
+      </ul>
+    </div>
+  </nav>
 
 <!--<a class="waves-effect waves-light btn-small">Button</a> -->
-<div class="container">
+
+
+
+ <div class="row">
+
+      <div class="col s3">
+        <!-- Grey navigation panel -->
+        <p>TOTAL DE PROCESOS</p>
+        <span id="texto_nav1"></span>
+      </div>
+
+      <div class="col s9">
+        <!-- Teal page content  -->
+         <div class="container">
     <div class="section">
         <button class="btn" id="proc" align="left">Procesos Padres</button>
         <button class="btn" id="proc2"align="left">Procesos Hijos</button>
@@ -41,12 +60,11 @@
  </div>
 
 </div>
+      </div>
 
+    </div>
 
 <script src="app.js"></script>
-<SCRIPT> 
-var tipoProc 
-</SCRIPT>
 
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
